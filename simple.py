@@ -1,12 +1,11 @@
 import webapp2
-from google.appengine.api import users
 
 
-class ApiHandler(webapp2.RequestHandler):
+class SimpleApiHandler(webapp2.RequestHandler):
     # create
     def post(self, itemID=None):
         try:
-            response = ApiService.create(self.request.body)
+            response = SimpleApiService.create(self.request.body)
         except ApiException as e:
             self.response.status = e.code
             return self.response.write(e.message)
@@ -16,9 +15,9 @@ class ApiHandler(webapp2.RequestHandler):
     def get(self, itemID=None):
         try:
             if itemID:
-                response = ApiService.read(itemID)
+                response = SimpleApiService.read(itemID)
             else:
-                response = ApiService.readAll()
+                response = SimpleApiService.readAll()
         except ApiException as e:
             self.response.status = e.code
             return self.response.write(e.message)
@@ -29,7 +28,7 @@ class ApiHandler(webapp2.RequestHandler):
         try:
             if not itemID:
                 raise ApiException(400, 'Bad Request')
-            response = ApiService.update(itemID, self.request.body)
+            response = SimpleApiService.update(itemID, self.request.body)
         except ApiException as e:
             self.response.status = e.code
             return self.response.write(e.message)
@@ -40,14 +39,14 @@ class ApiHandler(webapp2.RequestHandler):
         try:
             if not itemID:
                 raise ApiException(400, 'Bad Request')
-            response = ApiService.delete(itemID)
+            response = SimpleApiService.delete(itemID)
             return self.response.write(response)
         except ApiException as e:
             self.response.status = e.code
             return self.response.write(e.message)
 
 
-class ApiService():
+class SimpleApiService():
     # create
     @staticmethod
     def create(objectData):
@@ -81,5 +80,5 @@ class ApiException(Exception):
 
 
 app = webapp2.WSGIApplication([
-    ('/_api/objects/?(\d*)', ApiHandler)
+    ('/_api/simple/?(\d*)', SimpleApiHandler)
 ], debug=False)
