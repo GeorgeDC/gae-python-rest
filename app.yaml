@@ -9,8 +9,12 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
+- url: /_api/simpleUser.*
+  script: simpleUser.app
+
 - url: /_api/simple.*
   script: simple.app
+  
 
 #- url: .*
 #  script: main.app
